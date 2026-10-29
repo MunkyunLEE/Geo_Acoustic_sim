@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>로드맵 v1.1 · Acoustic Simulator</title>
+<script>try{var t=localStorage.getItem("acoustic-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<meta name="color-scheme" content="light dark">
+<style>:root{
+  --bg:#ffffff; --fg:#1b1f24; --muted:#5b6672; --line:#dde2e8; --card:#f6f8fa;
+  --accent:#1f6feb; --accent-soft:#e7f0ff;
+  --ref:#1a7f37; --ref-bg:#e6f4ea;
+  --apx:#9a6700; --apx-bg:#fff4d6;
+  --emp:#a40e26; --emp-bg:#fde8ec;
+  --dsg:#5b3fb5; --dsg-bg:#efe9fb;
+  --eq-bg:#f3f6fb; --code-bg:#f0f2f5;
+  --svg-line:#3b4756; --svg-a:#1f6feb; --svg-b:#d9480f; --svg-c:#2f9e44; --svg-fill:#e9eef5;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1318; --fg:#e6e9ee; --muted:#9aa5b1; --line:#2a323c; --card:#171c23;
+    --accent:#58a6ff; --accent-soft:#12233a;
+    --ref:#56d364; --ref-bg:#10261a;
+    --apx:#e3b341; --apx-bg:#2b2410;
+    --emp:#ff7b8f; --emp-bg:#2e1519;
+    --dsg:#b69cff; --dsg-bg:#1f1836;
+    --eq-bg:#141b26; --code-bg:#1a2029;
+    --svg-line:#aab4c0; --svg-a:#58a6ff; --svg-b:#ff9a62; --svg-c:#56d364; --svg-fill:#1b2430;
+  }
+}
+:root[data-theme="dark"]{
+    --bg:#0f1318; --fg:#e6e9ee; --muted:#9aa5b1; --line:#2a323c; --card:#171c23;
+    --accent:#58a6ff; --accent-soft:#12233a;
+    --ref:#56d364; --ref-bg:#10261a;
+    --apx:#e3b341; --apx-bg:#2b2410;
+    --emp:#ff7b8f; --emp-bg:#2e1519;
+    --dsg:#b69cff; --dsg-bg:#1f1836;
+    --eq-bg:#141b26; --code-bg:#1a2029;
+    --svg-line:#aab4c0; --svg-a:#58a6ff; --svg-b:#ff9a62; --svg-c:#56d364; --svg-fill:#1b2430;
+  }
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="light"]{color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:16px}
+body{margin:0; background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","Segoe UI",sans-serif;
+  line-height:1.7; font-size:16px}
+.layout{display:grid; grid-template-columns:260px minmax(0,1fr); max-width:1200px; margin:0 auto}
+nav.toc{position:sticky; top:0; align-self:start; height:100vh; overflow:auto; padding:24px 16px 24px 20px;
+  border-right:1px solid var(--line); font-size:14px}
+nav.toc .brand{font-weight:700; margin-bottom:4px}
+nav.toc .sub{color:var(--muted); font-size:12px; margin-bottom:14px}
+nav.toc a{display:block; color:var(--fg); text-decoration:none; padding:4px 8px; border-radius:6px}
+nav.toc a:hover{background:var(--accent-soft)}
+nav.toc a.top{color:var(--accent); font-weight:600}
+nav.toc hr{border:0; border-top:1px solid var(--line); margin:12px 0}
+main{padding:28px 32px 80px; min-width:0}
+h1{font-size:28px; margin:0 0 6px}
+h2{font-size:22px; margin:44px 0 10px; padding-top:8px; border-top:1px solid var(--line)}
+h3{font-size:17px; margin:26px 0 6px}
+p{margin:8px 0}
+.lead{color:var(--muted)}
+.banner{background:var(--accent-soft); border:1px solid var(--line); border-left:4px solid var(--accent);
+  padding:10px 14px; border-radius:8px; margin:16px 0}
+.warn{background:var(--apx-bg); border-left:4px solid var(--apx); padding:10px 14px; border-radius:8px; margin:14px 0}
+.tag{display:inline-block; font-size:12px; font-weight:600; padding:1px 8px; border-radius:999px; margin-left:6px; vertical-align:middle}
+.tag.ref{color:var(--ref); background:var(--ref-bg)}
+.tag.apx{color:var(--apx); background:var(--apx-bg)}
+.tag.emp{color:var(--emp); background:var(--emp-bg)}
+.tag.dsg{color:var(--dsg); background:var(--dsg-bg)}
+.eq{background:var(--eq-bg); border:1px solid var(--line); border-radius:8px; padding:10px 16px; margin:10px 0;
+  font-family:"Cambria Math","STIX Two Math","Latin Modern Math",Cambria,"Times New Roman",serif; font-size:17px;
+  overflow-x:auto; line-height:1.9}
+.eq .n{float:right; color:var(--muted); font-size:13px; font-family:inherit}
+.eq .note{display:block; color:var(--muted); font-size:13.5px; font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13.5px}
+code{background:var(--code-bg); padding:1px 5px; border-radius:4px}
+pre{background:var(--code-bg); border:1px solid var(--line); border-radius:8px; padding:12px 14px; overflow-x:auto; line-height:1.55}
+code{overflow-wrap:anywhere}
+pre code{background:none; padding:0; overflow-wrap:normal}
+table{border-collapse:collapse; width:100%; margin:12px 0; font-size:14.5px; display:block; overflow-x:auto}
+th,td{border:1px solid var(--line); padding:6px 10px; text-align:left; vertical-align:top}
+th{background:var(--card)}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums}
+ul,ol{padding-left:22px; margin:8px 0}
+li{margin:3px 0}
+figure{margin:16px 0; text-align:center}
+figure svg{max-width:100%; height:auto}
+figcaption{color:var(--muted); font-size:13.5px; margin-top:4px}
+svg text{fill:var(--fg); font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; font-size:13px}
+svg .ln{stroke:var(--svg-line); stroke-width:1.5; fill:none}
+svg .wall{stroke:var(--svg-line); stroke-width:3}
+svg .hatch{stroke:var(--svg-line); stroke-width:1}
+svg .ra{stroke:var(--svg-a); stroke-width:2; fill:none}
+svg .rb{stroke:var(--svg-b); stroke-width:2; fill:none}
+svg .dash{stroke:var(--svg-line); stroke-width:1.4; stroke-dasharray:5 4; fill:none}
+svg .dot{fill:var(--svg-a)}
+svg .dotb{fill:var(--svg-b)}
+svg .box{fill:var(--svg-fill); stroke:var(--svg-line); stroke-width:1.2}
+svg .thin{stroke:var(--muted); stroke-width:1; fill:none}
+svg .chord{stroke:var(--svg-c); stroke-width:3.5; fill:none}
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px}
+.card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 14px}
+footer{margin-top:60px; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding-top:14px}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr}
+  nav.toc{position:static; height:auto; border-right:0; border-bottom:1px solid var(--line)}
+  main{padding:20px 16px 60px}
+}
+@media print{ nav.toc{display:none} .layout{display:block} }
+
+blockquote{background:var(--accent-soft); border:1px solid var(--line); border-left:4px solid var(--accent);
+  margin:16px 0; padding:8px 16px; border-radius:8px}
+blockquote p{margin:4px 0}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="toc">
+<div class="brand">Acoustic Simulator</div>
+<div class="sub">로드맵 v1.1</div>
+<a class="top" href="../">← 앱으로 돌아가기</a>
+<a href="roadmap.html" style="font-weight:700">로드맵</a>
+<a href="physics.html">물리 기초·알고리즘</a>
+<hr>
+<a href="#한눈에-보기">한눈에 보기</a>
+<a href="#v10-대비-변경점-2026-10-21-승인">v1.0 대비 변경점 (2026-10-21 승인)</a>
+<a href="#확정된-기준선">확정된 기준선</a>
+<a href="#단계별-로드맵">단계별 로드맵</a>
+<a href="#결과-화면-구성-3개-뷰">결과 화면 구성 (3개 뷰)</a>
+<a href="#검증정확도-정책">검증·정확도 정책</a>
+<a href="#범위-밖-첫-릴리스">범위 밖 (첫 릴리스)</a>
+<a href="#배포와-문서-연동">배포와 문서 연동</a>
+<a href="#진행-방식">진행 방식</a>
+</nav>
+<main>
+<h1 id="3D-기하음향-시뮬레이터-로드맵-v11">3D 기하음향 시뮬레이터 로드맵 v1.1</h1>
+<p>버전 1.1 · 2026-10-21 · 기준 문서: Initial Road Map 261021 (v1.0)</p>
+<h2 id="한눈에-보기">한눈에 보기</h2>
+<blockquote>
+<p><strong>STL/OBJ 불러오기 → 점음원 놓기 → Run → 파면이 퍼지고 튕기는 모습과 상대 레벨 컬러맵 확인</strong></p>
+</blockquote>
+<ul>
+<li>브라우저 전용(GitHub Pages). 서버·로그인 없이 동작하고, 무거운 케이스만 나중에 선택적으로 백엔드로 보냅니다.</li>
+<li>결과는 절대 SPL이 아니라 <strong>음원 대비 상대 레벨</strong>입니다. 자유장 1 m 지점 = 0 dB 기준입니다.</li>
+<li>이 도구는 <strong>스크리닝용 근사 해석</strong>입니다. 정밀 해석(Wave6 등) 전에 "어디가 얼마나 세지고 약해지는가"를 빠르게 보는 용도입니다.</li>
+<li>모든 STEP은 <strong>구현 → 해석해 검증 → 보고 → 승인</strong> 순서로 진행하며, 승인 없이 다음 STEP으로 넘어가지 않습니다.</li>
+</ul>
+<h2 id="v10-대비-변경점-2026-10-21-승인">v1.0 대비 변경점 (2026-10-21 승인)</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>v1.0</th>
+<th>v1.1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>차원</td>
+<td>2D 먼저, 이후 3D</td>
+<td><strong>3D 직행</strong> (2D 솔버 폐기)</td>
+</tr>
+<tr>
+<td>입력</td>
+<td>2D 벽 그리기</td>
+<td><strong>STL/OBJ 임포트</strong> + 기본 도형 (편집기 없음)</td>
+</tr>
+<tr>
+<td>음원</td>
+<td>점음원</td>
+<td>점음원 먼저, 면음원은 STEP 6 (타입은 처음부터 점/면 구분형으로 설계)</td>
+</tr>
+<tr>
+<td>결과 표시</td>
+<td>SPL 히트맵</td>
+<td><strong>상대 레벨 컬러맵 + 파면 애니메이션 + 에코그램</strong></td>
+</tr>
+<tr>
+<td>컬러 스케일</td>
+<td>미정</td>
+<td>음원 대비 상대 레벨 (자유장 1 m = 0 dB, 기본 표시 0 ~ −60 dB)</td>
+</tr>
+<tr>
+<td>애니메이션</td>
+<td>없음</td>
+<td><strong>STEP 1부터 최소 버전</strong> 포함, STEP 5에서 완성(GIF 출력)</td>
+</tr>
+<tr>
+<td>수신기 추정</td>
+<td>미정</td>
+<td>직접음·초기 반사는 해석식, 확산 성분은 수신 구 track-length 추정</td>
+</tr>
+<tr>
+<td>좌표계</td>
+<td>미정</td>
+<td>Z-up 우수 좌표계, 단위 m (Rhino와 동일)</td>
+</tr>
+<tr>
+<td>전달 방식</td>
+<td>저장소</td>
+<td>이 환경에서 빌드·테스트 후 zip으로 전달, 사용자가 GitHub에 업로드</td>
+</tr>
+</tbody>
+</table>
+<h2 id="확정된-기준선">확정된 기준선</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주파수</td>
+<td>1/1 옥타브 밴드 125, 250, 500, 1000, 2000, 4000 Hz</td>
+</tr>
+<tr>
+<td>레이 수 (Normal)</td>
+<td>1차 레이 10,000개 (밴드별 기준, STEP 3 수렴 측정 후 확정)</td>
+</tr>
+<tr>
+<td>최대 반사</td>
+<td>5회</td>
+</tr>
+<tr>
+<td>핵심 물리</td>
+<td>직접음, 거리 감쇠, 공기 흡음, 정반사, 흡음, 확산 산란</td>
+</tr>
+<tr>
+<td>투과 / 회절</td>
+<td>기본 OFF, 투과는 STEP 6의 선택 모듈 (회절은 STEP 2에서 구현)</td>
+</tr>
+<tr>
+<td>프리셋</td>
+<td>Preview 1,000 / 2회 · Normal 10,000 / 5회 · High 100,000 / 10회 (미검증 초기값, 정확도 등급 아님)</td>
+</tr>
+<tr>
+<td>테스트 러너</td>
+<td>Vitest</td>
+</tr>
+<tr>
+<td>대상 환경</td>
+<td>데스크톱 브라우저 (Chrome/Edge 우선)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="단계별-로드맵">단계별 로드맵</h2>
+<table>
+<thead>
+<tr>
+<th>STEP</th>
+<th>이름</th>
+<th>한 줄 요약</th>
+<th>눈으로 확인하는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>골격</td>
+<td>배포되는 빈 3D 앱</td>
+<td>3D 뷰포트, 샘플 박스, 문서 링크</td>
+</tr>
+<tr>
+<td>1</td>
+<td>임포트 + 직접음</td>
+<td>STL/OBJ와 점음원, 직접음</td>
+<td>직접음 컬러맵, 구형 파면 입자</td>
+</tr>
+<tr>
+<td>2</td>
+<td>정반사 + 회절</td>
+<td>박스 룸 경계 + 이미지 소스 + 차폐 보정</td>
+<td>벽에서 튕기는 반사 파면, 차폐벽 그림자</td>
+</tr>
+<tr>
+<td>3</td>
+<td>장면 편집기 + Run</td>
+<td>객체 생성·임포트·편집, Run 버튼, 결과 재생</td>
+<td>배치 → Run → 결과 재생·멈춤</td>
+</tr>
+<tr>
+<td>4</td>
+<td>확산 산란</td>
+<td>확산 반사 + 수신기 추정자, 워커·진행률·취소</td>
+<td>수렴·에너지 보존 검증 결과</td>
+</tr>
+<tr>
+<td>5</td>
+<td>결과 + 출력</td>
+<td>에코그램, 표면 입사 에너지, GIF·CSV 출력</td>
+<td>해석 결과 → 시뮬레이션 → GIF</td>
+</tr>
+<tr>
+<td>6</td>
+<td>선택 모듈</td>
+<td>면음원, 투과(재료 속성 추가)</td>
+<td>OFF일 때 기준선과 동일</td>
+</tr>
+<tr>
+<td>7</td>
+<td>성능 + 백엔드</td>
+<td>벤치마크, 필요 시 서버 실행</td>
+<td>측정된 성능 등급</td>
+</tr>
+</tbody>
+</table>
+<h3 id="STEP-0-골격">STEP 0. 골격</h3>
+<ul>
+<li><strong>구현</strong></li>
+<li>Vite + React + TypeScript + Three.js 프로젝트 (Z-up, 단위 m)</li>
+<li>타입: Scene, Source(점/면 구분형), Material, Receiver, OctaveBand과 단위 변환 함수</li>
+<li>3D 뷰포트(궤도 카메라, 그리드), 샘플 장면(박스 룸, 지면+벽)</li>
+<li>Vitest, ESLint/Prettier, <code>docs/</code> 문서</li>
+<li>GitHub Pages 설정: Vite <code>base: '/acoustic-simulator/'</code>, <code>deploy.yml</code></li>
+<li><strong>문서 연동</strong>: 앱 헤더에 "물리 문서", "로드맵" 링크. 기능별 ⓘ 아이콘은 <code>physics.html</code>의 앵커(<code>#receiver</code> 등)로 이동</li>
+<li><strong>합격 기준</strong>: 빌드 성공, <code>/acoustic-simulator/</code> 하위 경로에서 자산·워커·문서 링크 정상, 백엔드 요청 없음, 테스트 통과</li>
+<li><strong>산출물</strong>: 프로젝트 zip + 실행/검증 방법</li>
+</ul>
+<h3 id="STEP-1-임포트-직접음">STEP 1. 임포트 + 직접음</h3>
+<ul>
+<li><strong>구현</strong></li>
+<li>STL/OBJ 임포트 (mm/cm/m 선택 → m 변환), 메시 검사(퇴화 삼각형 등)</li>
+<li>삼각형 BVH (자체 구현, three.js 비의존)</li>
+<li>점음원(밴드별 Lw), 수신점, 가시선 판정, 자유장 감쇠 + 공기 흡음</li>
+<li>수평 단면 <strong>상대 레벨 컬러맵</strong> (직접음, 해석식)</li>
+<li><strong>최소 파면 애니메이션</strong>: 구형 파면 입자, 재생/일시정지, 시간 슬라이더</li>
+<li><strong>검증</strong></li>
+<li>거리 2배 → −6.02 dB (공기 흡음 제외)</li>
+<li>불투명 차폐 시 직접음 0</li>
+<li>대역 합산은 선형 에너지 합, 근접 수신기에서 NaN/Infinity 없음</li>
+<li>BVH 결과 = 완전 탐색 결과</li>
+</ul>
+<h3 id="STEP-2-정반사-회절-박스-룸">STEP 2. 정반사 + 회절 (박스 룸)</h3>
+<ul>
+<li><strong>구현</strong></li>
+<li>해석 영역(기본 10 m 정육면체 박스 룸), 면별 경계 조건: 반사(재료 α) / 소산(α=1, 나간 광선 소멸)</li>
+<li>STL/OBJ 입력란을 패널 상단으로 이동, 임포트 메시는 영역 안의 객체</li>
+<li>이미지 소스 정반사(1~3차, 기본 2차), 경로를 실제 삼각형 위에서 검증</li>
+<li>회절: ISO 9613-2 차폐 보정(Dz, 단일 20 dB / 이중 25 dB 상한), 가려진 수신점에만 적용</li>
+<li>파면 애니메이션이 정반사를 따라가며, 점 / 면 표시 선택</li>
+<li>결과 표에 직접·반사·회절 성분 분해</li>
+<li><strong>검증</strong></li>
+<li>이미지 거리(평행 벽 9, 11, 15, 25 m), 단일 반사 에너지 (1−α)(1−s)/d², α=1 → 반사 0</li>
+<li>이미지 경로의 벽 차폐 무효 처리, 차수 증가 시 짧은 경로 유지</li>
+<li>Fresnel 반평면 참조해(scipy 사전 계산)와 비교, ISO 식은 0.3~3 dB 덜 감쇠</li>
+<li>경로차 δ 해석값(두께 0 / 0.4 m 벽, 좁은 기둥), 상한, 저주파 ≥ 고주파 이득</li>
+<li>파면 색 = 이미지 소스 레벨과 같은 식, 고정 시드 재현</li>
+<li><strong>알려진 한계</strong>: 가려진 곳에만 회절 적용(그림자 경계 약 4.8 dB 불연속), 반사 경로의 회절 없음, 파면에 회절파 없음, 확산 반사·후기 잔향 없음(레벨이 낮게 나옴), 약 100 Hz 이하 비신뢰</li>
+<li>회절은 원래 STEP 5 후보였으나 사용자 승인으로 STEP 2에 포함</li>
+</ul>
+<h3 id="STEP-3-장면-편집기-Run-2026-10-21-개정">STEP 3. 장면 편집기 + Run (2026-10-21 개정)</h3>
+<p>작업 흐름: <strong>장면을 직접 구성 → Run → 결과 확인 → 재생/멈춤</strong>. 편집 중에는 계산·미리보기를 하지 않습니다.</p>
+<ul>
+<li><strong>3-A 편집 모델 (순수 로직)</strong></li>
+<li>객체 = 서페이스(열린 면 허용, 솔리드 불필요) + 변환(이동·회전·크기) + 재료(α, s 밴드별)</li>
+<li>프리셋: 반사벽 / 소산벽(α=1) / 흡음재 / 장애물. 값은 사용자가 수정 가능. 투과 속성은 지원하지 않음(STEP 6)</li>
+<li>생성: 폴리라인 → extrude(벽), 닫힌 폴리라인 → 면, 기본 도형(박스, 평면, 원기둥)</li>
+<li>임포트 STL/OBJ도 같은 객체로 취급, 장면 JSON 저장/불러오기</li>
+<li><strong>3-B 편집 UI</strong></li>
+<li>3D 뷰에서 객체·음원·수신점 선택 → 속성 패널</li>
+<li>이동·회전·크기 조절: 숫자 입력과 기즈모 동시 지원, 그리드 스냅 on/off</li>
+<li>폴리라인 그리기 도구(평면도 클릭), extrude 높이 입력, 복제·삭제</li>
+<li>꼭짓점·모서리·면 편집, 실행 취소/다시 실행, Shift 수직 이동 구현 완료 (D31)</li>
+<li><strong>3-C Run 흐름</strong></li>
+<li>Run 버튼으로만 계산 (직접 + 정반사 + 회절), 결과는 스냅샷으로 보관</li>
+<li>편집하면 결과를 "오래된 결과"로 표시, 재생/멈춤/시간 이동은 결과에만 연결</li>
+<li><strong>검증</strong>: 변환 후 좌표 해석값, extrude 면 수·법선·면적, 장면 JSON 왕복 일치, 편집 중 계산 호출 없음, 기존 솔버 테스트 유지</li>
+<li><strong>합격 기준</strong>: 객체를 만들고 배치하고 Run해서 결과를 재생까지 막힘 없음</li>
+</ul>
+<h3 id="STEP-4-확산-산란-수신기-추정자-구현-완료-승인-대기">STEP 4. 확산 산란 + 수신기 추정자 (구현 완료, 승인 대기)</h3>
+<ul>
+<li><strong>구현</strong></li>
+<li>산란 계수 s(f), 코사인 가중(램버트) 샘플러, 시드 고정 난수, 확률적 분기(확률 s로 확산, 아니면 정반사)</li>
+<li>수신 구 <strong>track-length 추정자</strong>(수신점) + 3D 복셀 누적(슬라이스), 이중 집계 방지 규칙: 확산을 겪은 경로 + 이미지 음원 차수를 넘는 정반사 경로만 MC가 집계 (물리 문서 21장)</li>
+<li>밴드별 독립 추적, <strong>Web Worker</strong>, 진행률·<strong>취소</strong>, <strong>Run 설정</strong>(확산 켜기/끄기, 밴드당 레이 수, 최대 반사 횟수, 시드)</li>
+<li>배치 8개 기반 표준오차(±dB) 표시</li>
+<li><strong>검증 (자동 테스트)</strong></li>
+<li>에너지 수지: 흡수 + 공기 + 잔여 = 방출 (1e-9)</li>
+<li>s=0: 이미지 음원(≤N차) + MC(&gt;N차) = MC 전체, MC 추정자 ≈ 이미지 음원 (5 % 이내)</li>
+<li>s=1 닫힌 방 참조해 16π(1−α)/(Sα) (8 % 이내), 램버트 샘플러 분포</li>
+<li>자유장: 추정자 = (1 m / r)² (5 % 이내), 공기 흡음 포함</li>
+<li>같은 시드 → 같은 결과</li>
+<li><strong>남은 항목</strong>: 수신 반경 민감도와 레이 수 수렴 곡선은 체계적으로 측정하지 않음 (STEP 5 프리셋 정할 때 측정), 실측·타 도구 대조는 없음</li>
+</ul>
+<h3 id="STEP-5-결과-출력">STEP 5. 결과 + 출력</h3>
+<ul>
+<li><strong>구현</strong>: 수신점 에코그램, 표면 입사 에너지 컬러, 프리셋 Preview/Normal/High, <strong>재생 결과 GIF 출력</strong>, CSV/PNG 내보내기</li>
+<li><strong>합격 기준</strong>: 처음 쓰는 사람이 장면 구성 → Run → 결과 확인 → GIF 저장까지 막힘 없음</li>
+</ul>
+<h3 id="STEP-6-선택-모듈-모두-기본-OFF">STEP 6. 선택 모듈 (모두 기본 OFF)</h3>
+<ul>
+<li><strong>구현</strong>: 면음원(표본점 분할), 투과(TL → τ, α+τ ≤ 1, 재료 속성 추가)</li>
+<li>OFF 상태의 결과는 STEP 5와 동일해야 합니다.</li>
+</ul>
+<h3 id="STEP-7-성능-선택적-백엔드">STEP 7. 성능 + 선택적 백엔드</h3>
+<ul>
+<li><strong>구현</strong>: 삼각형 수·레이 수·반사 수·수신기 격자별 벤치마크, 공간 가속, 병목이 확인될 때만 WASM·백엔드</li>
+<li>로컬과 원격의 결과 스키마를 동일하게 유지합니다.</li>
+</ul>
+<h2 id="결과-화면-구성-3개-뷰">결과 화면 구성 (3개 뷰)</h2>
+<table>
+<thead>
+<tr>
+<th>뷰</th>
+<th>내용</th>
+<th>도입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. 정상상태 컬러맵</td>
+<td>수신기 높이 수평 단면의 상대 레벨, 밴드 선택/합산, 표면 입사 에너지</td>
+<td>STEP 1 (직접음) → STEP 3</td>
+</tr>
+<tr>
+<td>B. 파면 애니메이션</td>
+<td>구형 파면이 퍼지고 반사되며 색이 변하는 재생, 슬로모션·시간 슬라이더</td>
+<td>STEP 1 (최소) → STEP 5</td>
+</tr>
+<tr>
+<td>C. 에코그램</td>
+<td>수신점의 시간별 도달 에너지 (직접음, 초기 반사, 후미)</td>
+<td>STEP 4</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>세 뷰는 <strong>같은 추적 데이터</strong>에서 만들어지므로 숫자가 서로 모순되지 않습니다.</li>
+<li>파면 애니메이션은 압력 파형이 아니라 <strong>에너지 패킷의 전파</strong>입니다. 위상, 간섭, 회절은 보이지 않습니다.</li>
+<li>입자 색은 입자가 가진 에너지가 아니라 <strong>그 위치의 국소 에너지 밀도</strong>입니다. 거리 감쇠는 입자 에너지 감소가 아니라 입자 밀도 감소로 나타납니다.</li>
+</ul>
+<h2 id="검증정확도-정책">검증·정확도 정책</h2>
+<p>테스트 계층은 다음과 같고, 실패한 테스트를 조용히 우회하지 않습니다.</p>
+<ol>
+<li>단위 테스트: 벡터, 교차, 법선, dB 변환, 샘플링</li>
+<li>해석 테스트: 자유장 감쇠, 반사각, 이미지 소스</li>
+<li>보존 테스트: 흡수·반사·투과 에너지 수지</li>
+<li>수치 테스트: 레이 수, 수신기 크기, 장면 크기에 대한 수렴</li>
+<li>기준 테스트: 단순 기준 형상, 이후 실측·신뢰 가능한 소프트웨어와 비교</li>
+<li>회귀 테스트: 고정 장면 + 고정 시드 → 재현 가능한 결과</li>
+</ol>
+<p><strong>계획 목표치 (달성 주장이 아님)</strong>: 자유장 1 dB 이내, 단순 반사 2 dB 이내, 복합 다중 반사 3 dB 이내, 도심 차폐 영역은 회절 도입·독립 검증 후 5 dB 이내를 목표로 둡니다. "80%" 지표는 검증 데이터와 판정 기준을 정한 뒤에만 사용합니다. 이 도구의 출력은 상대 레벨이므로 허용 오차도 상대 레벨 기준으로 평가합니다.</p>
+<h2 id="범위-밖-첫-릴리스">범위 밖 (첫 릴리스)</h2>
+<ul>
+<li>위상·간섭, 실내 모드, FEM/FDTD 같은 파동 해석</li>
+<li>정확한 저주파 회절, 대기 굴절, 이동 음원, 기상 조건</li>
+<li>다층 투과, 클라우드·인증·DB, AI/ML</li>
+<li>이 모두는 사용자가 명시적으로 요청하기 전에는 추가하지 않습니다.</li>
+</ul>
+<h2 id="배포와-문서-연동">배포와 문서 연동</h2>
+<ul>
+<li>저장소 이름은 <code>acoustic-simulator</code>이고 Vite <code>base</code>는 <code>/acoustic-simulator/</code>입니다.</li>
+<li><code>public/docs/</code>의 문서가 <code>dist/docs/</code>로 복사되어 <code>https://&lt;계정&gt;.github.io/acoustic-simulator/docs/physics.html</code>로 열립니다.</li>
+<li>앱에서 문서로 가는 링크는 아래처럼 <code>BASE_URL</code> 기반으로 만들어 하위 경로에서도 깨지지 않게 합니다.</li>
+</ul>
+<pre><code class="language-ts">const docsUrl = (anchor = '') =&gt; `${import.meta.env.BASE_URL}docs/physics.html${anchor}`; // 문서 URL (앵커 선택)
+// 사용 예: &lt;a href={docsUrl('#receiver')} target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;ⓘ&lt;/a&gt;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>앱 UI 요소</th>
+<th>문서 앵커</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>음원 Lw 입력, 상대 레벨 컬러바</td>
+<td><code>#source</code></td>
+</tr>
+<tr>
+<td>공기 조건(온도·습도)</td>
+<td><code>#air</code></td>
+</tr>
+<tr>
+<td>재료 흡음률 α</td>
+<td><code>#reflection</code></td>
+</tr>
+<tr>
+<td>재료 산란 계수 s</td>
+<td><code>#scattering</code></td>
+</tr>
+<tr>
+<td>수신기 반경, 수렴 정보</td>
+<td><code>#receiver</code></td>
+</tr>
+<tr>
+<td>애니메이션, 에코그램</td>
+<td><code>#viz</code></td>
+</tr>
+<tr>
+<td>회절 OFF 경고</td>
+<td><code>#future</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>실제 GitHub Pages 배포는 이 환경에서 확인할 수 없습니다. 빌드와 <code>npm run preview</code> 기준의 하위 경로 동작까지만 검증해 전달하고, 실배포 확인은 사용자께 부탁드립니다.</li>
+</ul>
+<h2 id="진행-방식">진행 방식</h2>
+<ul>
+<li>매 STEP 종료 시 보고 양식을 따릅니다: A 목표·상태 / B 변경 파일 / C 물리·알고리즘 / D 실행 명령 / E 테스트 결과(예상값 vs 실제값, PASS/FAIL) / F 수동 확인 방법 / G 한계·위험 / H 다음 STEP 제안.</li>
+<li>물리, 단위, 가정, 아키텍처, 합격 기준은 임의로 바꾸지 않고, 바꿔야 하면 근거와 함께 먼저 제안해 승인을 받습니다.</li>
+<li>결정 사항은 <code>docs/decisions.md</code>에 기록합니다.</li>
+</ul>
+<footer>Acoustic Simulator 문서 v1.1 · 2026-10-21 · 이 문서의 식과 설계는 해당 STEP에서 검증되기 전까지 설계안입니다.</footer>
+</main>
+</div>
+</body>
+</html>

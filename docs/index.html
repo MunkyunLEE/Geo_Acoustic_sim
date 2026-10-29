@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acoustic Simulator</title>
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // 첫 페인트 전에 저장된 테마를 적용해 깜빡임을 막는다 (선택이 없으면 OS 설정을 따른다)
+      try {
+        var t = localStorage.getItem('acoustic-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    </script>
+    <script type="module" crossorigin src="./assets/index-CfyNguly.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DvbPtFs9.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
